@@ -29,9 +29,13 @@ export function useNFTApproval(
   };
 
   useEffect(() => {
-    setIsApproved(isERC721 
-      ? (approvalData as `0x${string}`) === spender 
-      : Boolean(approvalData));
+    if (typeof approvalData === 'string') {
+      setIsApproved(isERC721 
+        ? approvalData === spender 
+        : Boolean(approvalData));
+    } else {
+      setIsApproved(Boolean(approvalData));
+    }
   }, [approvalData, spender, isERC721]);
 
   return { isApproved, approve: handleApprove, isApproving };
