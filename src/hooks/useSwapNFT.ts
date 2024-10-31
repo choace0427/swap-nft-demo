@@ -170,8 +170,7 @@ export function useSwapNFT() {
   };
 
   const handleAcceptSwap = async (args: {
-    swapId: string | number;
-    // Add other necessary parameters if needed
+    swapId: string | number;    
   }) => {
     if (!acceptSwap) {
       throw new Error('Contract write not available');

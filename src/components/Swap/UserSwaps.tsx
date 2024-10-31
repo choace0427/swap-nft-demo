@@ -12,6 +12,14 @@ export function UserSwaps() {
     isCancelling 
   } = useSwapNFT();
 
+  const handleAccept = (swapId: string | number) => {
+    acceptSwap({ swapId });
+  };
+
+  const handleCancel = (swapId: string | number) => {
+    cancelSwap(swapId);
+  };
+
   if (!address || !userSwaps?.length) {
     return (
       <div className="text-center py-8 text-gray-500">
