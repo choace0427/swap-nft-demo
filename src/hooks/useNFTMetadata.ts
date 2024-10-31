@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useContractRead } from 'wagmi';
+import { useReadContract } from 'wagmi';
 import { ERC721_ABI, ERC1155_ABI } from '@/config/abis';
 import { NFTMetadata } from '@/types/nft';
 import { fetchIPFSMetadata } from '@/utils/ipfs';
@@ -13,12 +13,11 @@ export function useNFTMetadata(
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const { data: tokenURI } = useContractRead({
+  const { data: tokenURI, isError, isLoading: isReadLoading } = useReadContract({
     address: nftAddress,
     abi: isERC721 ? ERC721_ABI : ERC1155_ABI,
     functionName: isERC721 ? 'tokenURI' : 'uri',
-    args: [tokenId],
-    enabled: Boolean(nftAddress && tokenId),
+    args: [tokenId]
   });
 
   useEffect(() => {
@@ -40,6 +39,12 @@ export function useNFTMetadata(
 
     getMetadata();
   }, [tokenURI]);
+
+  useEffect(() => {
+    if (isError) {
+      setError(new Error('Failed to fetch token URI'));
+    }
+  }, [isError]);
 
   return { metadata, isLoading, error };
 }
