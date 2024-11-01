@@ -1,33 +1,48 @@
 import { useSwapNFT } from '@/hooks/useSwapNFT';
 import { SwapCard } from './SwapCard';
 import { toast } from 'react-hot-toast';
+import { useState } from 'react';
 
 export function ActiveSwaps() {
   const { 
     activeSwaps, 
     acceptSwap, 
-    cancelSwap, 
-    isAccepting, 
-    isCancelling 
+    cancelSwap 
   } = useSwapNFT();
+  
+  // Track loading states by swap ID
+  const [acceptingSwaps, setAcceptingSwaps] = useState<Set<number>>(new Set());
+  const [cancellingSwaps, setCancellingSwaps] = useState<Set<number>>(new Set());
 
   const handleAccept = async (index: number) => {
-    console.log('Accepting swap with index:', index);
     try {
+      setAcceptingSwaps(prev => new Set(prev).add(index));
       await acceptSwap({ swapId: index });
     } catch (error) {
       console.error('Error accepting swap:', error);
       toast.error('Failed to accept swap');
+    } finally {
+      setAcceptingSwaps(prev => {
+        const next = new Set(prev);
+        next.delete(index);
+        return next;
+      });
     }
   };
 
   const handleCancel = async (index: number) => {
     try {
+      setCancellingSwaps(prev => new Set(prev).add(index));
       await cancelSwap({ args: [BigInt(index)] });
-      toast.success('Swap cancelled successfully!');
     } catch (error) {
       console.error('Error cancelling swap:', error);
       toast.error('Failed to cancel swap');
+    } finally {
+      setCancellingSwaps(prev => {
+        const next = new Set(prev);
+        next.delete(index);
+        return next;
+      });
     }
   };
 
@@ -40,16 +55,16 @@ export function ActiveSwaps() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-[calc(100vh-theme(spacing.32))] overflow-y-auto">
       {activeSwaps.map((swap, index) => (
         <SwapCard
           key={index}
           swap={swap}
-          index={index}
+          index={Number(swap.id)}
           onAccept={handleAccept}
           onCancel={handleCancel}
-          isAccepting={isAccepting}
-          isCancelling={isCancelling}
+          isAccepting={acceptingSwaps.has(Number(swap.id))}
+          isCancelling={cancellingSwaps.has(Number(swap.id))}
         />
       ))}
     </div>

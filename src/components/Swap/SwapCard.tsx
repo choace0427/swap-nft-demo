@@ -20,30 +20,40 @@ export function SwapCard({
   isCancelling,
 }: SwapCardProps) {
   return (
-    <div className="border rounded-lg p-4 shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <NFTDisplay 
-          nftAddress={swap.swapOffer.nftAddress}
-          nftId={swap.swapOffer.nftId}
-        />
+    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-6 shadow-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded-lg overflow-hidden">
+          <NFTDisplay 
+            nftAddress={swap.swapOffer.nftAddress}
+            nftId={swap.swapOffer.nftId}
+          />
+        </div>
         
-        <div className="space-y-2">
-          <p className="font-medium">
-            Initiator: {shortenAddress(swap.initiator)}
-          </p>
-          <p>Amount: {formatNFTAmount(swap.swapOffer.nftAmount)}</p>
-          {swap.deadline > 0n && (
-            <p>Expires in: {formatDeadline(swap.deadline)}</p>
-          )}
-          {swap.secondUser !== '0x0000000000000000000000000000000000000000' && (
-            <p>For: {shortenAddress(swap.secondUser)}</p>
-          )}
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-[#CBD5E1]">
+              Initiator: <span className="text-[#F8FAFC] font-medium">{shortenAddress(swap.initiator)}</span>
+            </p>
+            <p className="text-white/60">
+              Amount: <span className="text-white font-medium">{formatNFTAmount(swap.swapOffer.nftAmount)}</span>
+            </p>
+            {swap.deadline > 0n && (
+              <p className="text-white/60">
+                Expires in: <span className="text-white font-medium">{formatDeadline(swap.deadline)}</span>
+              </p>
+            )}
+            {swap.secondUser !== '0x0000000000000000000000000000000000000000' && (
+              <p className="text-white/60">
+                For: <span className="text-white font-medium">{shortenAddress(swap.secondUser)}</span>
+              </p>
+            )}
+          </div>
           
-          <div className="flex space-x-2 mt-4">
+          <div className="flex space-x-4 mt-6">
             <button
               onClick={() => onAccept(index)}
               disabled={isAccepting}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-gray-300"
+              className="flex-1 px-6 py-3 bg-gradient-to-br from-[#2563EB] via-[#3B82F6] to-[#60A5FA] text-white rounded-xl font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-blue-500/25"
             >
               {isAccepting ? 'Accepting...' : 'Accept'}
             </button>
@@ -51,7 +61,7 @@ export function SwapCard({
             <button
               onClick={() => onCancel(index)}
               disabled={isCancelling}
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-gray-300"
+              className="flex-1 px-6 py-3 bg-gradient-to-br from-[#DC2626] via-[#EF4444] to-[#F87171] text-white rounded-xl font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-red-500/25"
             >
               {isCancelling ? 'Cancelling...' : 'Cancel'}
             </button>

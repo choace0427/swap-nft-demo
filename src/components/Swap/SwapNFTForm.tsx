@@ -79,104 +79,104 @@ export function SwapNFTForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          NFT Address
-        </label>
-        <input
-          type="text"
-          value={formData.nftAddress}
-          onChange={(e) => setFormData({ ...formData, nftAddress: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="0x..."
-          required
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-8 space-y-6">
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-[#CBD5E1] mb-2">
+            NFT Address
+          </label>
+          <input
+            type="text"
+            value={formData.nftAddress}
+            onChange={(e) => setFormData({ ...formData, nftAddress: e.target.value })}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            placeholder="0x..."
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Token ID
-        </label>
-        <input
-          type="number"
-          value={formData.nftId}
-          onChange={(e) => setFormData({ ...formData, nftId: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium text-[#CBD5E1] mb-2">
+            Token ID
+          </label>
+          <input
+            type="number"
+            value={formData.nftId}
+            onChange={(e) => setFormData({ ...formData, nftId: e.target.value })}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Amount
-        </label>
-        <input
-          type="number"
-          value={formData.nftAmount}
-          onChange={(e) => setFormData({ ...formData, nftAmount: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          min="1"
-          required
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium text-[#CBD5E1] mb-2">
+            Amount
+          </label>
+          <input
+            type="number"
+            value={formData.nftAmount}
+            onChange={(e) => setFormData({ ...formData, nftAmount: e.target.value })}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            min="1"
+            required
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Recipient Address (Optional)
-        </label>
-        <input
-          type="text"
-          value={formData.secondUser}
-          onChange={(e) => setFormData({ ...formData, secondUser: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          placeholder="0x..."
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium text-[#CBD5E1] mb-2">
+            Recipient Address (Optional)
+          </label>
+          <input
+            type="text"
+            value={formData.secondUser}
+            onChange={(e) => setFormData({ ...formData, secondUser: e.target.value })}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            placeholder="0x..."
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Deadline (Optional)
-        </label>
-        <input
-          type="datetime-local"
-          value={formData.deadline}
-          onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium text-[#CBD5E1] mb-2">
+            Deadline (Optional)
+          </label>
+          <input
+            type="datetime-local"
+            value={formData.deadline}
+            onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+          />
+        </div>
 
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          checked={formData.isERC721}
-          onChange={(e) => setFormData({ ...formData, isERC721: e.target.checked })}
-          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-        />
-        <label className="ml-2 block text-sm text-gray-900">
-          Is ERC721?
-        </label>
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            checked={formData.isERC721}
+            onChange={(e) => setFormData({ ...formData, isERC721: e.target.checked })}
+            className="w-5 h-5 bg-white/5 border-white/10 rounded text-blue-500 focus:ring-blue-500/50"
+          />
+          <label className="text-sm text-[#F8FAFC]">
+            Is ERC721?
+          </label>
+        </div>
       </div>
 
       {!isApproved && (
         <button
           type="button"
-          onClick={() => {
-            approve?.();
-          }}
+          onClick={() => approve?.()}
           disabled={isApproving}
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-300"
+          className="w-full px-6 py-3 bg-gradient-to-br from-[#2563EB] via-[#3B82F6] to-[#60A5FA] text-white rounded-xl font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-blue-500/25"
         >
           {isApproving ? 'Approving...' : 'Approve NFT'}
         </button>
       )}
 
       <div className="space-y-4">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-[#CBD5E1] mb-2">
           Requested NFTs
         </label>
         {formData.requestNFTs.map((nft, index) => (
-          <div key={index} className="space-y-2">
+          <div key={index} className="p-4 bg-white/5 rounded-lg space-y-3">
             <input
               type="text"
               value={nft.nftAddress}
@@ -186,7 +186,7 @@ export function SwapNFTForm() {
                 setFormData({ ...formData, requestNFTs: newRequestNFTs });
               }}
               placeholder="NFT Address"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
             <input
               type="number"
@@ -197,7 +197,7 @@ export function SwapNFTForm() {
                 setFormData({ ...formData, requestNFTs: newRequestNFTs });
               }}
               placeholder="Token ID"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             />
             <input
               type="number"
@@ -208,7 +208,7 @@ export function SwapNFTForm() {
                 setFormData({ ...formData, requestNFTs: newRequestNFTs });
               }}
               placeholder="Amount"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-[#F8FAFC] placeholder-[#CBD5E1] focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               min="1"
             />
           </div>
@@ -219,7 +219,7 @@ export function SwapNFTForm() {
             ...formData,
             requestNFTs: [...formData.requestNFTs, { nftAddress: '', nftId: '', nftAmount: '1' }]
           })}
-          className="text-blue-600 hover:text-blue-700"
+          className="text-[#60A5FA] hover:text-[#93C5FD] font-semibold transition-colors duration-200"
         >
           + Add Another NFT
         </button>
@@ -228,7 +228,7 @@ export function SwapNFTForm() {
       <button
         type="submit"
         disabled={isProposing || !isApproved}
-        className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-300"
+        className="w-full px-6 py-3 bg-gradient-to-br from-[#2563EB] via-[#3B82F6] to-[#60A5FA] text-white rounded-xl font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-blue-500/25"
       >
         {isProposing ? 'Proposing...' : 'Propose Swap'}
       </button>

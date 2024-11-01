@@ -1,4 +1,4 @@
-import { useReadContract, useWriteContract, useSimulateContract } from 'wagmi';
+import { useReadContract, useWriteContract, useSimulateContract, useAccount } from 'wagmi';
 import { SWAP_NFT_ADDRESS } from '@/config/contracts';
 import { SWAP_NFT_ABI } from '@/config/abis/swapNft';
 import { Swap } from '@/types/contracts';
@@ -27,6 +27,8 @@ interface SwapParams {
 }
 
 export function useSwapNFT() {
+  const account = useAccount();
+  const userAddress = account.address;
   const [activeSwaps, setActiveSwaps] = useState<Swap[]>([]);
   const [userSwaps, setUserSwaps] = useState<Swap[]>([]);
 
@@ -45,13 +47,13 @@ export function useSwapNFT() {
   });
 
   // Contract writes
-  const { writeContract: proposeSwap, isPending: isProposing, data: txHash } = useWriteContract();
+  const { writeContract: proposeSwap, isPending: isProposing } = useWriteContract();
   const { writeContract: acceptSwap, isPending: isAccepting } = useWriteContract();
   const { writeContract: cancelSwap, isPending: isCancelling } = useWriteContract();
 
   useEffect(() => {
     if (activeItems) {
-      setActiveSwaps(activeItems as Swap[]);
+      setActiveSwaps(activeItems as unknown as Swap[]);
     }
   }, [activeItems]);
 
@@ -144,9 +146,10 @@ export function useSwapNFT() {
         },
         {
           onSuccess: (hash) => {
+            console.log("hash", hash);
             const proposalStorage = JSON.parse(localStorage.getItem('swapProposals') || '{}');
-            const index = activeSwaps.length;
-            proposalStorage[index] = formattedParams.requestNFTs.map(group => 
+            const uniqueKey = `${userAddress}_${formattedParams.deadline}`;
+            proposalStorage[uniqueKey] = formattedParams.requestNFTs.map(group => 
               group.map(nft => ({
                 ...nft,
                 nftId: nft.nftId.toString(),
@@ -179,14 +182,27 @@ export function useSwapNFT() {
     try {
       const proposalStorage = JSON.parse(localStorage.getItem('swapProposals') || '{}');
       const swapIdNum = Number(args.swapId);
+      const swap = activeSwaps.find(swap => Number(swap.id) === swapIdNum);
+      
+      if (!swap) {
+        throw new Error('Swap not found');
+      }
+
+      const uniqueKey = `${swap.initiator}_${swap.deadline}`;
+      
       const hash = await acceptSwap({
         address: SWAP_NFT_ADDRESS,
         abi: SWAP_NFT_ABI,
         functionName: 'acceptSwap',
-        args: [BigInt(swapIdNum), proposalStorage[swapIdNum][0], 0n] 
+        args: [BigInt(swapIdNum), proposalStorage[uniqueKey][0], 0n] 
       },
       {
         onSuccess: (tx) => {
+          // Remove the swap data from localStorage
+          const updatedStorage = JSON.parse(localStorage.getItem('swapProposals') || '{}');
+          delete updatedStorage[uniqueKey];
+          localStorage.setItem('swapProposals', JSON.stringify(updatedStorage));
+          
           toast.success('Swap accepted successfully!');
         },
         onError: (error: any) => {
@@ -201,18 +217,58 @@ export function useSwapNFT() {
     }
   };
 
+  const handleCancelSwap = async (args: {
+    swapId: string | number;
+  }) => {
+    if (!cancelSwap) {
+      throw new Error('Contract write not available');
+    }
+
+    try {
+      const swapIdNum = Number(args.args);
+      const swap = activeSwaps.find(swap => {
+        return Number(swap.id) === swapIdNum;
+      }
+      );
+      if (!swap) {
+        throw new Error('Swap not found');
+      }
+
+      const uniqueKey = `${swap.initiator}_${swap.deadline}`;
+
+      const hash = await cancelSwap({
+        address: SWAP_NFT_ADDRESS,
+        abi: SWAP_NFT_ABI,
+        functionName: 'cancelSwap',
+        args: [BigInt(swapIdNum)]
+      }, {
+        onSuccess: () => {
+          // Remove the swap data from localStorage
+          const updatedStorage = JSON.parse(localStorage.getItem('swapProposals') || '{}');
+          delete updatedStorage[uniqueKey];
+          localStorage.setItem('swapProposals', JSON.stringify(updatedStorage));
+          
+          toast.success('Swap cancelled successfully!');
+        },
+        onError: (error: any) => {
+          toast.error('Failed to cancel swap. Please try again.');
+          console.error('Cancel swap error:', error);
+        }
+      });
+      return hash;
+    } catch (error) {
+      console.error('Error cancelling swap:', error);
+      throw error;
+    }
+  };
+
   return {
     activeSwaps,
     userSwaps,
     totalListings,
     proposeSwap: handleProposeSwap,
     acceptSwap: handleAcceptSwap,
-    cancelSwap: (args: any) => cancelSwap?.({
-      address: SWAP_NFT_ADDRESS,
-      abi: SWAP_NFT_ABI,
-      functionName: 'cancelSwap',
-      args: args.args,
-    }),
+    cancelSwap: handleCancelSwap,
     isProposing,
     isAccepting,
     isCancelling,

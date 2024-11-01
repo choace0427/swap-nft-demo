@@ -17,6 +17,13 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      zIndex: {
+        '-10': '-10',
+      },
+      colors: {
+        'cyber-blue': '#00BCD4',
+        'deep-space': '#1A1A2E',
+      },
     },
   },
   plugins: [

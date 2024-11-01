@@ -17,6 +17,7 @@ export function UserSwaps() {
   };
 
   const handleCancel = (swapId: string | number) => {
+    console.log(swapId);
     cancelSwap(swapId);
   };
 
