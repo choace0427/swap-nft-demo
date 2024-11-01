@@ -225,7 +225,7 @@ export function useSwapNFT() {
     }
 
     try {
-      const swapIdNum = Number(args.args);
+      const swapIdNum = Number(args.swapId);
       const swap = activeSwaps.find(swap => {
         return Number(swap.id) === swapIdNum;
       }

@@ -30,18 +30,20 @@ export function ActiveSwaps() {
     }
   };
 
-  const handleCancel = async (index: number) => {
+  const handleCancelSwap = async (index: number) => {
     try {
       setCancellingSwaps(prev => new Set(prev).add(index));
-      await cancelSwap({ args: [BigInt(index)] });
+      await cancelSwap({
+        swapId: index
+      });
     } catch (error) {
       console.error('Error cancelling swap:', error);
       toast.error('Failed to cancel swap');
     } finally {
       setCancellingSwaps(prev => {
-        const next = new Set(prev);
-        next.delete(index);
-        return next;
+        const newSet = new Set(prev);
+        newSet.delete(index);
+        return newSet;
       });
     }
   };
@@ -62,7 +64,7 @@ export function ActiveSwaps() {
           swap={swap}
           index={Number(swap.id)}
           onAccept={handleAccept}
-          onCancel={handleCancel}
+          onCancel={handleCancelSwap}
           isAccepting={acceptingSwaps.has(Number(swap.id))}
           isCancelling={cancellingSwaps.has(Number(swap.id))}
         />

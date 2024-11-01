@@ -4,9 +4,10 @@ import { getImageUrl } from '@/utils/ipfs';
 interface NFTImageProps {
   src?: string;
   alt?: string;
+  className?: string;
 }
 
-export function NFTImage({ src, alt = 'NFT' }: NFTImageProps) {
+export const NFTImage: React.FC<NFTImageProps> = ({ src, alt, className }) => {
   // Convert IPFS URL to a usable HTTP URL
   const formattedSrc = src && src.startsWith('ipfs://')
     ? `https://ipfs.io/ipfs/${src.substring(7)}`
@@ -16,10 +17,10 @@ export function NFTImage({ src, alt = 'NFT' }: NFTImageProps) {
     <div className="relative aspect-square w-full">
       <Image
         src={getImageUrl(formattedSrc)} // Ensure getImageUrl can handle the modified src
-        alt={alt}
+        alt={alt || 'NFT Image'}
         fill
-        className="object-cover rounded-lg"
+        className={`object-cover rounded-lg ${className}`}
       />
     </div>
   );
-}
+};

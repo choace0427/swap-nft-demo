@@ -5,7 +5,7 @@ export interface NftEntry {
   }
   
   export interface Swap {
-    swapId: bigint;
+    id: bigint;
     initiator: `0x${string}`;
     swapOffer: NftEntry;
     proposals: `0x${string}`[];
